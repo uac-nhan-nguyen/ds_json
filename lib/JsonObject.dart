@@ -1,7 +1,11 @@
 class JsonMapObject {
-  final Map<String, dynamic> data;
+  final dynamic data;
 
-  JsonMapObject(this.data);
+  JsonMapObject(this.data){
+    if (!(data is Map<String, dynamic>)){
+      throw 'data must be Map<String, dynamic>';
+    }
+  }
 
   double getDouble(String key) {
     try {
