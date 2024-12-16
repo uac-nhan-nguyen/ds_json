@@ -30,8 +30,7 @@ class JsonMapObject {
     if (keys.length == 1) {
       return getDouble(keys.first);
     } else {
-      return getObjectOrNull(keys.first)?.getDoubleRecursive(keys.sublist(1)) ??
-          0;
+      return getObjectOrNull(keys.first)?.getDoubleRecursive(keys.sublist(1)) ?? 0;
     }
   }
 
@@ -59,8 +58,7 @@ class JsonMapObject {
 
   num getNum(String key) => (_data[key] ?? 0) as num;
 
-  int? getIntOrNull(String key) =>
-      _data[key] == null ? null : _data[key] as int;
+  int? getIntOrNull(String key) => _data[key] == null ? null : _data[key] as int;
 
   bool getBool(String key) => (_data[key] ?? false) as bool;
 
@@ -69,13 +67,11 @@ class JsonMapObject {
     if (keys.length == 1) {
       return getBool(keys.first);
     } else {
-      return getObjectOrNull(keys.first)?.getBoolRecursive(keys.sublist(1)) ??
-          false;
+      return getObjectOrNull(keys.first)?.getBoolRecursive(keys.sublist(1)) ?? false;
     }
   }
 
-  bool? getBoolOrNull(String key) =>
-      _data[key] == null ? null : _data[key] as bool;
+  bool? getBoolOrNull(String key) => _data[key] == null ? null : _data[key] as bool;
 
   bool hasKey(String key) => _data[key] != null;
 
@@ -86,8 +82,7 @@ class JsonMapObject {
     if (keys.length == 1) {
       return getString(keys.first);
     } else {
-      return getObjectOrNull(keys.first)?.getStringRecursive(keys.sublist(1)) ??
-          '';
+      return getObjectOrNull(keys.first)?.getStringRecursive(keys.sublist(1)) ?? '';
     }
   }
 
@@ -96,50 +91,40 @@ class JsonMapObject {
     if (keys.length == 1) {
       return getStringOrNull(keys.first);
     } else {
-      return getObjectOrNull(keys.first)
-          ?.getStringRecursiveOrNull(keys.sublist(1));
+      return getObjectOrNull(keys.first)?.getStringRecursiveOrNull(keys.sublist(1));
     }
   }
 
-  String? getStringOrNull(String key) =>
-      _data[key] == null ? null : _data[key] as String;
+  String? getStringOrNull(String key) => _data[key] == null ? null : _data[key] as String;
 
-  JsonMapObject getObject(String key) => _data[key] is Map<String, dynamic>
-      ? JsonMapObject(_data[key] as Map<String, dynamic>)
-      : throw 'Invalid data format key[${key}] expect=Map runtimeType=${_data[key].runtimeType}';
+  JsonMapObject getObject(String key) =>
+      _data[key] is Map<String, dynamic> ? JsonMapObject(_data[key] as Map<String, dynamic>) : throw 'Invalid data format key[${key}] expect=Map runtimeType=${_data[key].runtimeType}';
 
-  JsonMapObject? getObjectOrNull(String key) => _data[key] == null
-      ? null
-      : JsonMapObject(_data[key] as Map<String, dynamic>);
+  JsonMapObject? getObjectOrNull(String key) => _data[key] == null ? null : JsonMapObject(_data[key] as Map<String, dynamic>);
 
-  Map<String, dynamic> getObjectData(String key) => _data[key]
-          is Map<String, dynamic>
-      ? _data[key] as Map<String, dynamic>
-      : throw 'Invalid data format key[${key}] expect=Map runtimeType=${_data[key].runtimeType}';
+  Map<String, dynamic> getObjectData(String key) =>
+      _data[key] is Map<String, dynamic> ? _data[key] as Map<String, dynamic> : throw 'Invalid data format key[${key}] expect=Map runtimeType=${_data[key].runtimeType}';
 
-  Map<String, dynamic>? getObjectDataOrNull(String key) =>
-      _data[key] == null ? null : getObjectData(key);
+  Map<String, dynamic>? getObjectDataOrNull(String key) => _data[key] == null ? null : getObjectData(key);
 
-  List<T> getList<T>(
-          String key, T Function(Map<String, dynamic> data) creator) =>
-      ((_data[key] ?? <dynamic>[]) as List<dynamic>)
-          .map((dynamic e) => creator(e as Map<String, dynamic>))
-          .toList();
+  List<T> getList<T>(String key, T Function(Map<String, dynamic> data) creator) => ((_data[key] ?? <dynamic>[]) as List<dynamic>).map((dynamic e) => creator(e as Map<String, dynamic>)).toList();
 
-  List<String> getListString(String key) =>
-      ((_data[key] ?? <dynamic>[]) as List<dynamic>)
-          .map((dynamic e) => e as String)
-          .toList();
+  List<String> getListString(String key) => ((_data[key] ?? <dynamic>[]) as List<dynamic>).map((dynamic e) => e as String).toList();
 
-  List<T> getListRecursive<T>(
-      List<String> keys, T Function(Map<String, dynamic> data) creator) {
+  List<String> getListStringRecursive(List<String> keys) {
+    if (keys.length == 1) {
+      return ((_data[keys[0]] ?? <dynamic>[]) as List<dynamic>).map((dynamic e) => e as String).toList();
+    } else {
+      return getObjectOrNull(keys.first)?.getListStringRecursive(keys.sublist(1)) ?? [];
+    }
+  }
+
+  List<T> getListRecursive<T>(List<String> keys, T Function(Map<String, dynamic> data) creator) {
     assert(keys.isNotEmpty);
     if (keys.length == 1) {
       return getList(keys.first, creator);
     } else {
-      return getObjectOrNull(keys.first)
-              ?.getListRecursive(keys.sublist(1), creator) ??
-          [];
+      return getObjectOrNull(keys.first)?.getListRecursive(keys.sublist(1), creator) ?? [];
     }
   }
 }
